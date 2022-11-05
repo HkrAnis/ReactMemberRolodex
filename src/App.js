@@ -3,7 +3,8 @@ class App extends Component{
   constructor(){
     super()
     this.state={
-      members:[]
+      members:[],
+      searchedInput:''
   }
 }
   componentDidMount(){
@@ -12,15 +13,16 @@ class App extends Component{
     .then((users)=>{this.setState(()=>{return {members:users}},()=>{console.log(users)})})
   }
   render(){
+    var filteredResults=this.state.members.filter((member)=>{return member.name.toLocaleLowerCase().includes(this.state.searchedInput)})
     return <div>
       <input type='Search' placeholder='Search' onChange={
         (event)=>{this.setState(()=>{
-          var filteredResults=this.state.members.filter((member)=>{return member.name.includes(event.target.value)})
-          return {members:filteredResults}
+          const searchedValue=event.target.value.toLocaleLowerCase()
+          return {searchedInput:searchedValue}
           })}
       }
       />
-      {this.state.members.map((member)=>{return <h1 key={member.id}>{member.name}</h1>})}
+      {filteredResults.map((member)=>{return <h1 key={member.id}>{member.name}</h1>})}
     </div>
   }
 
